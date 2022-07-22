@@ -1,8 +1,10 @@
 require("dotenv").config();
+const cron = require("node-cron");
 const fs = require("node:fs");
 const path = require("node:path");
 const Discord = require("discord.js");
 const { Collection } = require("discord.js");
+const { PING } = require("./constants/slash-commands");
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
@@ -20,6 +22,25 @@ for (const file of commandFiles) {
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+
+  let cryptoChannel = client.channels.cache.get(process.env.CRYPTO_CHANNEL_ID);
+
+  cron.schedule(
+    "00 08, 21 * * *",
+    async () => {
+      try {
+        const command = client.commands.get(PING);
+        await command.execute(`/${PING}`, true, cryptoChannel);
+      } catch (error) {
+        console.error(error);
+        await interaction.reply({
+          content: "There was an error while executing this command!",
+          ephemeral: true,
+        });
+      }
+    },
+    { timezone: "America/Los_Angeles" }
+  );
 });
 
 client.on("interactionCreate", async (interaction) => {
