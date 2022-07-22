@@ -26,7 +26,7 @@ client.on("ready", () => {
   let cryptoChannel = client.channels.cache.get(process.env.CRYPTO_CHANNEL_ID);
 
   cron.schedule(
-    "00 08, 21 * * *",
+    "00 08,21 * * *",
     async () => {
       try {
         const command = client.commands.get(PING);
