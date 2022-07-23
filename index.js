@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const Discord = require("discord.js");
 const { Collection } = require("discord.js");
-const { PING } = require("./constants/slash-commands");
+const { PING, ARE_MINERS_ACTIVE } = require("./constants/slash-commands");
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
@@ -26,11 +26,11 @@ client.on("ready", () => {
   let cryptoChannel = client.channels.cache.get(process.env.CRYPTO_CHANNEL_ID);
 
   cron.schedule(
-    "00 08,21 * * *",
+    "00 8,21 * * *",
     async () => {
       try {
-        const command = client.commands.get(PING);
-        await command.execute(`/${PING}`, true, cryptoChannel);
+        const command = client.commands.get(ARE_MINERS_ACTIVE);
+        await command.execute(`/${ARE_MINERS_ACTIVE}`, true, cryptoChannel);
       } catch (error) {
         console.error(error);
         await interaction.reply({
